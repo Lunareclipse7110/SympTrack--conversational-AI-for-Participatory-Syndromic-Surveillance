@@ -1,44 +1,18 @@
-SympTrack — Conversational AI for Syndromic Surveillance
+# 🩺 SympTrack — AI for Syndromic Surveillance
 
-SympTrack is a hybrid AI-powered platform for real-time disease syndromic surveillance. It combines a conversational chatbot, outbreak detection, and feedback collection from ASHA workers to track and analyze disease patterns efficiently.
+**SympTrack** is a hybrid AI platform for real-time disease monitoring. It combines a 🤖 conversational chatbot, 🌡️ outbreak detection, and 📊 ASHA worker feedback collection to provide actionable insights.  
 
-🚀 Features
+## 🚀 Features
+- **🧠 Hybrid RAG + Rule-Based AI** – Shows confidence scores and trusted sources.  
+- **🦠 Syndromic Surveillance** – Auto-detects disease syndromes.  
+- **📍 ST-DBSCAN Clustering** – Real-time outbreak detection and hotspot mapping.  
+- **🎤 Dialect-Aware ASR** – Simulated voice input support.  
+- **📝 ASHA Active Learning** – Collects field feedback for continuous improvement.  
 
-Hybrid RAG + Rule-Based AI – Shows confidence scores and sources for responses.
+## 🖥️ Frontend
+- ⚡ React app with chat interface, outbreak heatmap, and surveillance dashboard.  
 
-Syndromic Surveillance – Auto-detects disease syndromes.
+## ⚙️ Backend
+- 🐍 Python FastAPI implementing all core features, ready to run.  
 
-ST-DBSCAN Clustering – Real-time outbreak detection and geospatial clustering.
-
-Dialect-Aware ASR – Voice input support (simulated).
-
-ASHA Active Learning – Feedback system for continuous improvement.
-
-🖥️ Frontend
-
-Full React application with all five features.
-
-Interactive chat interface.
-
-Outbreak heatmap visualization.
-
-Syndromic surveillance dashboard.
-
-ASHA worker feedback system.
-
-⚙️ Backend
-
-Python FastAPI implementation.
-
-Implements all five novel features:
-
-Hybrid RAG + Rule-Based Safety
-
-Syndromic Surveillance
-
-ST-DBSCAN Clustering
-
-ASR integration points
-
-ASHA Active Learning
-
+**SympTrack** — bridging AI 🤖 and public health 🏥 for smarter, faster disease response.
