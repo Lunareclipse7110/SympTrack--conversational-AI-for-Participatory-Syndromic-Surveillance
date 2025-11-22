@@ -45,34 +45,178 @@ const SympTrackApp = () => {
     headache: { en: 'headache', kn: 'ತಲೆನೋವು', ta: 'தலைவலி', te: 'తలనొప్పి', hi: 'सिरदर्द' }
   };
 
-  // Simulated symptom database for RAG
+  // Comprehensive symptom database for RAG
   const symptomDatabase = {
+    // Single symptoms
     'fever': {
-      conditions: ['Malaria', 'Dengue', 'Typhoid', 'COVID-19'],
-      advice: 'Rest, stay hydrated, monitor temperature',
-      emergency: false
-    },
-    'fever+rash': {
-      conditions: ['Dengue', 'Measles', 'Chikungunya'],
-      advice: 'Seek medical attention, dengue testing recommended',
-      emergency: true,
-      syndrome: 'Dengue-like Syndrome'
-    },
-    'cough+fever': {
-      conditions: ['COVID-19', 'Tuberculosis', 'Pneumonia'],
-      advice: 'Isolate, get tested for COVID-19, consult doctor',
+      conditions: ['Malaria', 'Dengue', 'Typhoid', 'COVID-19', 'Viral Fever', 'Influenza', 'Tuberculosis'],
+      advice: 'Rest well, drink plenty of fluids (water, ORS), monitor temperature every 4 hours. Take paracetamol for fever. If fever persists beyond 3 days or goes above 103°F, consult doctor immediately.',
       emergency: false,
-      syndrome: 'Respiratory Syndrome'
+      prevention: 'Use mosquito nets, maintain hygiene, wash hands frequently, get vaccinated'
     },
+    'cough': {
+      conditions: ['Common Cold', 'Bronchitis', 'Pneumonia', 'Tuberculosis', 'Asthma', 'COVID-19', 'Allergies'],
+      advice: 'Take steam inhalation, drink warm water, avoid cold drinks. If cough persists beyond 2 weeks or has blood, see doctor immediately.',
+      emergency: false,
+      prevention: 'Avoid smoking, wear mask in polluted areas, maintain good ventilation'
+    },
+    'headache': {
+      conditions: ['Migraine', 'Tension Headache', 'Sinusitis', 'Meningitis', 'High Blood Pressure', 'Dengue'],
+      advice: 'Rest in dark room, stay hydrated, take paracetamol. If severe with neck stiffness or vision problems, seek immediate care.',
+      emergency: false,
+      prevention: 'Reduce stress, sleep well, stay hydrated, limit screen time'
+    },
+    'rash': {
+      conditions: ['Measles', 'Chickenpox', 'Dengue', 'Allergic Reaction', 'Fungal Infection', 'Heat Rash'],
+      advice: 'Keep skin clean and dry, avoid scratching, apply calamine lotion. See doctor if rash spreads or has blisters.',
+      emergency: false,
+      prevention: 'Maintain hygiene, use clean clothes, get vaccinated for measles/chickenpox'
+    },
+    'pain': {
+      conditions: ['Muscle Pain', 'Joint Pain', 'Arthritis', 'Injury', 'Dengue', 'Chikungunya'],
+      advice: 'Rest affected area, apply hot/cold compress, take paracetamol. Avoid aspirin if fever present.',
+      emergency: false,
+      prevention: 'Exercise regularly, maintain good posture, stay active'
+    },
+    'vomiting': {
+      conditions: ['Food Poisoning', 'Gastroenteritis', 'Viral Infection', 'Pregnancy', 'Appendicitis'],
+      advice: 'Start ORS (oral rehydration solution), avoid solid food for few hours, take small sips of water. If persistent or has blood, see doctor.',
+      emergency: false,
+      prevention: 'Eat fresh food, wash hands before eating, drink clean water'
+    },
+    'diarrhea': {
+      conditions: ['Food Poisoning', 'Gastroenteritis', 'Cholera', 'Dysentery', 'Viral Infection', 'Parasites'],
+      advice: 'Drink plenty of ORS, avoid dairy and spicy food, maintain hygiene. If blood in stool or severe dehydration, go to hospital.',
+      emergency: false,
+      prevention: 'Drink boiled/filtered water, wash hands, eat hygienic food'
+    },
+    
+    // Emergency symptoms
     'chest pain': {
-      conditions: ['Heart Attack', 'Cardiac Emergency'],
-      advice: 'EMERGENCY: Call 108 immediately',
-      emergency: true
+      conditions: ['Heart Attack', 'Angina', 'Cardiac Emergency', 'Pulmonary Embolism'],
+      advice: '🚨 EMERGENCY: Call 108 immediately. Chew 300mg aspirin if available. Do NOT drive yourself. Go to nearest hospital NOW.',
+      emergency: true,
+      prevention: 'Regular exercise, healthy diet, control blood pressure, quit smoking'
     },
     'difficulty breathing': {
-      conditions: ['Severe Respiratory Distress', 'COVID-19', 'Asthma'],
-      advice: 'EMERGENCY: Seek immediate medical care',
-      emergency: true
+      conditions: ['Severe Asthma', 'Heart Failure', 'COVID-19 Pneumonia', 'Anaphylaxis', 'Pulmonary Embolism'],
+      advice: '🚨 EMERGENCY: Call 108 immediately. Sit upright, stay calm. Use inhaler if you have asthma. Requires immediate oxygen support.',
+      emergency: true,
+      prevention: 'Avoid triggers, keep rescue inhaler handy, get vaccinated'
+    },
+    'severe bleeding': {
+      conditions: ['Trauma', 'Internal Bleeding', 'Dengue', 'Ulcer', 'Blood Disorder'],
+      advice: '🚨 EMERGENCY: Call 108 immediately. Apply pressure to wound, elevate injured part. Do not remove embedded objects.',
+      emergency: true,
+      prevention: 'Be careful with sharp objects, maintain platelet count if dengue suspected'
+    },
+    'unconscious': {
+      conditions: ['Stroke', 'Heart Attack', 'Severe Hypoglycemia', 'Head Injury', 'Seizure'],
+      advice: '🚨 EMERGENCY: Call 108 NOW. Check breathing, place in recovery position. Do NOT give food/water. CPR if trained.',
+      emergency: true,
+      prevention: 'Control diabetes, manage blood pressure, avoid head injuries'
+    },
+    
+    // Two-symptom combinations
+    'fever+cough': {
+      conditions: ['COVID-19', 'Tuberculosis', 'Pneumonia', 'Bronchitis', 'Influenza', 'Common Cold'],
+      advice: 'Isolate yourself, wear mask, get COVID-19 RT-PCR test. Take steam inhalation, paracetamol. If breathing difficulty develops, seek immediate care. If cough persists beyond 2 weeks, get chest X-ray for TB screening.',
+      emergency: false,
+      syndrome: 'Respiratory Syndrome',
+      prevention: 'Wear masks, maintain ventilation, get vaccinated, avoid crowded places'
+    },
+    'fever+rash': {
+      conditions: ['Dengue', 'Measles', 'Chikungunya', 'Zika Virus', 'Typhoid'],
+      advice: 'This combination suggests dengue-like illness. Get NS1 antigen and platelet count test immediately. Drink plenty of coconut water and ORS. Monitor for warning signs: bleeding gums, black stools, persistent vomiting. Avoid aspirin and ibuprofen - use only paracetamol.',
+      emergency: true,
+      syndrome: 'Dengue-like Syndrome',
+      prevention: 'Eliminate stagnant water, use mosquito nets, wear full-sleeve clothes, use repellents'
+    },
+    'fever+headache': {
+      conditions: ['Meningitis', 'Encephalitis', 'Typhoid', 'Dengue', 'Malaria', 'Influenza'],
+      advice: 'Severe headache with fever needs medical attention. If neck stiffness present, go to emergency immediately (meningitis suspect). Take paracetamol, stay in dark room, stay hydrated. Get blood tests done.',
+      emergency: false,
+      syndrome: 'CNS Infection Syndrome',
+      prevention: 'Get meningitis vaccine, avoid mosquito bites, maintain hygiene'
+    },
+    'fever+pain': {
+      conditions: ['Dengue', 'Chikungunya', 'Malaria', 'Typhoid', 'Leptospirosis'],
+      advice: 'Muscle/joint pain with fever suggests mosquito-borne illness. Get complete blood count, dengue NS1 test. Drink plenty of fluids, use paracetamol only. Avoid aspirin/ibuprofen. Monitor platelet count daily if dengue suspected.',
+      emergency: false,
+      syndrome: 'Arthralgia-Fever Syndrome',
+      prevention: 'Use mosquito nets, eliminate breeding sites, wear protective clothing'
+    },
+    'vomiting+diarrhea': {
+      conditions: ['Gastroenteritis', 'Food Poisoning', 'Cholera', 'Rotavirus', 'Norovirus'],
+      advice: 'Start ORS immediately (1 liter per hour if severe). Avoid solid food for 6 hours. Take small sips of water frequently. Zinc tablets for children. If blood in stool, severe dehydration, or high fever, go to hospital immediately.',
+      emergency: false,
+      syndrome: 'Acute Gastroenteritis Syndrome',
+      prevention: 'Drink boiled water, wash hands with soap, eat freshly cooked food, maintain food hygiene'
+    },
+    'cough+difficulty breathing': {
+      conditions: ['Severe Pneumonia', 'Asthma Attack', 'COVID-19', 'Bronchitis', 'COPD', 'Lung Infection'],
+      advice: '⚠️ URGENT: This needs immediate medical attention. Go to hospital now. Use inhaler if available. Sit upright, try to stay calm. May need oxygen support and antibiotics.',
+      emergency: true,
+      syndrome: 'Severe Respiratory Distress Syndrome',
+      prevention: 'Get pneumonia vaccine, avoid smoking, maintain good indoor air quality'
+    },
+    'headache+vomiting': {
+      conditions: ['Migraine', 'Meningitis', 'Brain Tumor', 'High Blood Pressure', 'Concussion'],
+      advice: 'Severe headache with vomiting can be serious. If with fever and neck stiffness, go to emergency (meningitis). If after head injury, seek immediate care. For migraine: rest in dark, quiet room, take prescribed medication.',
+      emergency: false,
+      syndrome: 'Neurological Syndrome',
+      prevention: 'Manage stress, sleep regularly, avoid head injuries, control blood pressure'
+    },
+    'fever+difficulty breathing': {
+      conditions: ['Severe COVID-19', 'Pneumonia', 'Tuberculosis', 'Lung Infection', 'Sepsis'],
+      advice: '🚨 EMERGENCY: Call 108 immediately. This indicates severe infection. Needs oxygen support and hospitalization. Do not delay. Check oxygen saturation if pulse oximeter available (below 94% is emergency).',
+      emergency: true,
+      syndrome: 'Severe Respiratory Infection Syndrome',
+      prevention: 'Get COVID vaccine, pneumonia vaccine, maintain immunity, avoid sick contacts'
+    },
+    'rash+pain': {
+      conditions: ['Chikungunya', 'Dengue', 'Shingles', 'Rheumatic Fever', 'Allergic Reaction'],
+      advice: 'Rash with joint pain suggests chikungunya or dengue. Get blood tests (CBC, dengue/chikungunya serology). Use paracetamol for pain. Apply calamine lotion on rash. Avoid aspirin/ibuprofen if fever present.',
+      emergency: false,
+      syndrome: 'Viral Arthritis Syndrome',
+      prevention: 'Mosquito protection, maintain immunity, get adequate rest'
+    },
+    
+    // Three-symptom combinations
+    'fever+cough+difficulty breathing': {
+      conditions: ['COVID-19 Pneumonia', 'Severe Pneumonia', 'Tuberculosis', 'ARDS', 'Lung Infection'],
+      advice: '🚨 EMERGENCY: Call 108 NOW. This is severe respiratory illness. Needs immediate hospitalization and oxygen. Check oxygen levels. Sit upright while waiting for ambulance. Do not delay.',
+      emergency: true,
+      syndrome: 'Acute Respiratory Distress Syndrome',
+      prevention: 'COVID-19 vaccination, pneumonia vaccine, avoid smoking, early treatment of infections'
+    },
+    'fever+headache+vomiting': {
+      conditions: ['Meningitis', 'Encephalitis', 'Brain Infection', 'Cerebral Malaria'],
+      advice: '🚨 URGENT: Go to emergency immediately. This suggests brain/meningeal infection. Check for neck stiffness. Needs IV antibiotics and hospitalization. Do not wait.',
+      emergency: true,
+      syndrome: 'Meningitis Syndrome',
+      prevention: 'Meningitis vaccination, avoid mosquito bites, maintain hygiene'
+    },
+    'fever+rash+pain': {
+      conditions: ['Dengue', 'Chikungunya', 'Zika Virus', 'Rheumatic Fever'],
+      advice: 'Classic dengue/chikungunya presentation. Get NS1, dengue IgM, IgG, chikungunya tests. Check platelet count daily. Drink 3-4 liters of fluids. Use paracetamol only. Watch for warning signs: severe abdominal pain, bleeding, restlessness.',
+      emergency: true,
+      syndrome: 'Severe Dengue-Chikungunya Syndrome',
+      prevention: 'Comprehensive mosquito control, eliminate breeding sites, use repellents'
+    },
+    'vomiting+diarrhea+fever': {
+      conditions: ['Gastroenteritis', 'Food Poisoning', 'Typhoid', 'Cholera', 'Dysentery'],
+      advice: 'Severe gastroenteritis needs medical care. Start ORS immediately. If unable to retain fluids or signs of dehydration (dry mouth, no urine, weakness), go to hospital for IV fluids. Get stool test and blood culture if fever high.',
+      emergency: false,
+      syndrome: 'Severe Gastroenteritis Syndrome',
+      prevention: 'Typhoid vaccination, drink boiled water, maintain strict food hygiene'
+    },
+    'cough+fever+headache': {
+      conditions: ['Influenza', 'COVID-19', 'Pneumonia', 'Tuberculosis', 'Upper Respiratory Infection'],
+      advice: 'Common flu-like illness. Get COVID test to rule out. Rest at home, isolate from others, wear mask. Take paracetamol for fever/headache. Steam inhalation for cough. Drink warm fluids. See doctor if symptoms worsen or persist beyond 5 days.',
+      emergency: false,
+      syndrome: 'Influenza-like Illness',
+      prevention: 'Flu vaccination, COVID vaccination, wear masks in crowded places'
     }
   };
 
