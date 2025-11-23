@@ -24,6 +24,12 @@ const SympTrackApp = () => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [audioEnabled, setAudioEnabled] = useState(true);
   
+  // Health Facilities & Schemes state
+  const [facilitiesTab, setFacilitiesTab] = useState('facilities');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedScheme, setSelectedScheme] = useState('all');
+  const [selectedFacility, setSelectedFacility] = useState(null);
+  
   const recognitionRef = useRef(null);
   const synthRef = useRef(window.speechSynthesis);
 
@@ -221,6 +227,102 @@ const SympTrackApp = () => {
   };
 
   const emergencySymptoms = ['chest pain', 'difficulty breathing', 'severe bleeding', 'unconscious'];
+  // Health Schemes Data
+  const schemes = [
+    { id: 'ayushman', name: 'Ayushman Bharat PM-JAY', color: 'bg-blue-500' },
+    { id: 'cghs', name: 'CGHS', color: 'bg-green-500' },
+    { id: 'esis', name: 'ESIS', color: 'bg-purple-500' },
+    { id: 'state', name: 'State Health Scheme', color: 'bg-orange-500' }
+  ];
+
+  const facilities = [
+    {
+      id: 1,
+      name: 'Government General Hospital',
+      type: 'Government Hospital',
+      distance: '1.2 km',
+      address: 'Park Town, Chennai',
+      phone: '044-2536 1500',
+      timing: '24/7 Emergency',
+      schemes: ['ayushman', 'cghs', 'esis', 'state'],
+      services: ['Emergency Care', 'Surgery', 'Maternity', 'Pediatrics']
+    },
+    {
+      id: 2,
+      name: 'Primary Health Centre - Adyar',
+      type: 'Primary Health Centre',
+      distance: '2.5 km',
+      address: 'Adyar, Chennai',
+      phone: '044-2441 2345',
+      timing: '8 AM - 8 PM',
+      schemes: ['ayushman', 'state'],
+      services: ['General Medicine', 'Vaccination', 'Maternity Care']
+    },
+    {
+      id: 3,
+      name: 'ESI Hospital Kilpauk',
+      type: 'ESI Hospital',
+      distance: '3.8 km',
+      address: 'Kilpauk, Chennai',
+      phone: '044-2641 2000',
+      timing: '24/7',
+      schemes: ['esis', 'ayushman'],
+      services: ['Occupational Health', 'Emergency', 'Surgery']
+    },
+    {
+      id: 4,
+      name: 'Community Health Centre - T Nagar',
+      type: 'Community Health Centre',
+      distance: '4.1 km',
+      address: 'T Nagar, Chennai',
+      phone: '044-2434 5678',
+      timing: '9 AM - 6 PM',
+      schemes: ['ayushman', 'state'],
+      services: ['General Medicine', 'Dental', 'Laboratory']
+    }
+  ];
+
+  const schemeDetails = [
+    {
+      id: 'ayushman',
+      name: 'Ayushman Bharat PM-JAY',
+      description: 'Provides health coverage of ₹5 lakh per family per year',
+      eligibility: 'Based on SECC 2011 data, covers poor and vulnerable families',
+      benefits: ['Cashless treatment', 'Secondary & tertiary care', 'Pre-existing conditions covered'],
+      howToApply: 'Check eligibility at PM-JAY portal or nearest Ayushman Mitra'
+    },
+    {
+      id: 'cghs',
+      name: 'Central Government Health Scheme',
+      description: 'Health coverage for central government employees and pensioners',
+      eligibility: 'Central government employees, pensioners and their dependents',
+      benefits: ['Cashless treatment at empanelled facilities', 'Domiciliary treatment', 'Pensioner facilities'],
+      howToApply: 'Apply through your department or CGHS wellness centre'
+    },
+    {
+      id: 'esis',
+      name: 'Employee State Insurance Scheme',
+      description: 'Social security for workers in organized sector',
+      eligibility: 'Employees earning up to ₹21,000 per month',
+      benefits: ['Medical care for self and family', 'Sickness benefit', 'Maternity benefit'],
+      howToApply: 'Employer enrolls workers automatically'
+    },
+    {
+      id: 'state',
+      name: 'Tamil Nadu State Health Scheme',
+      description: 'Chief Minister\'s Comprehensive Health Insurance Scheme',
+      eligibility: 'All ration card holders in Tamil Nadu',
+      benefits: ['₹5 lakh coverage', 'Cashless treatment', 'Wide network of hospitals'],
+      howToApply: 'Visit nearest primary health centre with ration card'
+    }
+  ];
+
+  const filteredFacilities = facilities.filter(facility => {
+    const matchesSearch = facility.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         facility.address.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesScheme = selectedScheme === 'all' || facility.schemes.includes(selectedScheme);
+    return matchesSearch && matchesScheme;
+  });
 
   // Initialize speech recognition
   useEffect(() => {
@@ -608,6 +710,16 @@ const SympTrackApp = () => {
           >
             👥 ASHA Dashboard
           </button>
+          <button
+            onClick={() => setActiveTab('facilities')}
+            className={`px-6 py-3 font-semibold transition ${
+              activeTab === 'facilities'
+                ? 'border-b-2 border-blue-600 text-blue-600'
+                : 'text-gray-600 hover:text-blue-600'
+            }`}
+          >
+            🏥 Facilities & Schemes
+          </button>
         </div>
       </div>
 
@@ -892,6 +1004,210 @@ const SympTrackApp = () => {
                       </div>
                       <div className="text-sm text-gray-700 mt-2">
                         Status: {feedback.status}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === 'facilities' && (
+          <div className="h-full overflow-y-auto p-6">
+            <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+              🏥 Health Facilities & Government Schemes
+            </h2>
+
+            {/* Sub-tabs */}
+            <div className="bg-white shadow-md rounded-lg mb-4">
+              <div className="flex">
+                <button
+                  onClick={() => setFacilitiesTab('facilities')}
+                  className={`flex-1 py-3 px-6 font-semibold transition-colors rounded-tl-lg ${
+                    facilitiesTab === 'facilities'
+                      ? 'bg-blue-600 text-white'
+                      : 'text-gray-600 hover:bg-gray-50'
+                  }`}
+                >
+                  🏥 Find Facilities
+                </button>
+                <button
+                  onClick={() => setFacilitiesTab('schemes')}
+                  className={`flex-1 py-3 px-6 font-semibold transition-colors rounded-tr-lg ${
+                    facilitiesTab === 'schemes'
+                      ? 'bg-blue-600 text-white'
+                      : 'text-gray-600 hover:bg-gray-50'
+                  }`}
+                >
+                  🛡️ Health Schemes
+                </button>
+              </div>
+            </div>
+
+            {/* Facilities Sub-tab */}
+            {facilitiesTab === 'facilities' && (
+              <div>
+                {/* Search and Filter */}
+                <div className="bg-white rounded-lg shadow-md p-4 mb-4">
+                  <div className="flex gap-3 mb-3">
+                    <div className="flex-1 relative">
+                      <input
+                        type="text"
+                        placeholder="Search by name or location..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="w-full pl-4 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-sm font-semibold text-gray-700">Filter by Scheme:</span>
+                    <button
+                      onClick={() => setSelectedScheme('all')}
+                      className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                        selectedScheme === 'all'
+                          ? 'bg-gray-700 text-white'
+                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                      }`}
+                    >
+                      All Schemes
+                    </button>
+                    {schemes.map(scheme => (
+                      <button
+                        key={scheme.id}
+                        onClick={() => setSelectedScheme(scheme.id)}
+                        className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                          selectedScheme === scheme.id
+                            ? `${scheme.color} text-white`
+                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                        }`}
+                      >
+                        {scheme.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Facilities List */}
+                <div className="space-y-4">
+                  {filteredFacilities.map(facility => (
+                    <div
+                      key={facility.id}
+                      className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer"
+                      onClick={() => setSelectedFacility(facility.id === selectedFacility ? null : facility.id)}
+                    >
+                      <div className="p-5">
+                        <div className="flex justify-between items-start mb-3">
+                          <div className="flex-1">
+                            <h3 className="text-xl font-bold text-gray-800 mb-1">{facility.name}</h3>
+                            <p className="text-sm text-gray-600 mb-2">{facility.type}</p>
+                          </div>
+                          <div className="flex items-center gap-2 text-blue-600 font-semibold">
+                            <MapPin className="w-4 h-4" />
+                            {facility.distance}
+                          </div>
+                        </div>
+
+                        <div className="space-y-2 mb-3">
+                          <div className="flex items-start gap-2 text-gray-700">
+                            <MapPin className="w-4 h-4 mt-1 text-gray-500 flex-shrink-0" />
+                            <span className="text-sm">{facility.address}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-gray-700">
+                            <span className="text-sm">📞 {facility.phone}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-gray-700">
+                            <span className="text-sm">🕐 {facility.timing}</span>
+                          </div>
+                        </div>
+
+                        <div className="mb-3">
+                          <p className="text-xs font-semibold text-gray-600 mb-2">ACCEPTED SCHEMES:</p>
+                          <div className="flex flex-wrap gap-2">
+                            {facility.schemes.map(schemeId => {
+                              const scheme = schemes.find(s => s.id === schemeId);
+                              return (
+                                <span
+                                  key={schemeId}
+                                  className={`${scheme.color} text-white px-3 py-1 rounded-full text-xs font-medium`}
+                                >
+                                  {scheme.name}
+                                </span>
+                              );
+                            })}
+                          </div>
+                        </div>
+
+                        {selectedFacility === facility.id && (
+                          <div className="mt-4 pt-4 border-t border-gray-200">
+                            <p className="text-sm font-semibold text-gray-700 mb-2">Available Services:</p>
+                            <div className="flex flex-wrap gap-2">
+                              {facility.services.map((service, idx) => (
+                                <span
+                                  key={idx}
+                                  className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium"
+                                >
+                                  {service}
+                                </span>
+                              ))}
+                            </div>
+                            <button className="mt-4 w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                              Get Directions
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {filteredFacilities.length === 0 && (
+                  <div className="bg-white rounded-lg shadow-md p-8 text-center">
+                    <p className="text-gray-600">No facilities found matching your criteria.</p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Schemes Sub-tab */}
+            {facilitiesTab === 'schemes' && (
+              <div>
+                <div className="bg-white rounded-lg shadow-md p-6 mb-4">
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">Available Government Health Schemes</h3>
+                  <p className="text-gray-600">Learn about eligibility and benefits of various health schemes</p>
+                </div>
+
+                <div className="space-y-4">
+                  {schemeDetails.map(scheme => (
+                    <div key={scheme.id} className="bg-white rounded-lg shadow-md p-6">
+                      <h4 className="text-2xl font-bold text-gray-800 mb-2">{scheme.name}</h4>
+                      <p className="text-gray-700 mb-4">{scheme.description}</p>
+
+                      <div className="space-y-3">
+                        <div>
+                          <h5 className="font-semibold text-gray-800 mb-1">Eligibility:</h5>
+                          <p className="text-gray-700">{scheme.eligibility}</p>
+                        </div>
+
+                        <div>
+                          <h5 className="font-semibold text-gray-800 mb-1">Benefits:</h5>
+                          <ul className="list-disc list-inside space-y-1">
+                            {scheme.benefits.map((benefit, idx) => (
+                              <li key={idx} className="text-gray-700">{benefit}</li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        <div>
+                          <h5 className="font-semibold text-gray-800 mb-1">How to Apply:</h5>
+                          <p className="text-gray-700">{scheme.howToApply}</p>
+                        </div>
+
+                        <button className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                          Check Eligibility →
+                        </button>
                       </div>
                     </div>
                   ))}
