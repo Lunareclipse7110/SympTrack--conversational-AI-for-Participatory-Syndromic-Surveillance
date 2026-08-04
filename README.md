@@ -1,68 +1,207 @@
-🩺 SympTrack — AI-Powered Syndromic Surveillance Platform
+# 🩺 SympTrack – AI-Powered Syndromic Surveillance Platform
 
-SympTrack is an end-to-end AI-powered public health surveillance platform that enables real-time disease monitoring, outbreak detection, and intelligent decision support. The platform combines Retrieval-Augmented Generation (RAG), machine learning, spatial-temporal analytics, and conversational AI to assist healthcare workers, epidemiologists, and public health authorities in identifying emerging disease trends before they escalate.
+SympTrack is a multilingual AI-powered syndromic surveillance platform that combines conversational AI, Retrieval-Augmented Generation (RAG), unsupervised machine learning, and spatial-temporal analytics to support early disease surveillance and public health decision-making. The system enables voice/text symptom reporting, syndrome detection, outbreak identification, and AI-assisted health guidance through a unified web application.
 
-Designed with a scalable microservice architecture, SympTrack integrates symptom analysis, outbreak prediction, geospatial clustering, and community feedback collection into a unified dashboard for faster, data-driven public health response.
+---
 
-🚀 Key Features
-🤖 AI Health Assistant
-Hybrid RAG + Rule-Based AI for accurate health guidance.
-Confidence scoring with citations from trusted medical knowledge sources.
-Context-aware conversational interface for symptom assessment.
-🦠 Syndromic Surveillance
-Automatically classifies reported symptoms into disease syndromes.
-Detects abnormal symptom patterns using intelligent analytics.
-Supports early warning and public health monitoring.
-📍 Spatial-Temporal Outbreak Detection
-ST-DBSCAN clustering identifies disease hotspots in real time.
-Interactive geospatial heatmaps for outbreak visualization.
-Tracks outbreak evolution across both location and time.
-🎤 Voice-Based Symptom Reporting
-Dialect-aware Automatic Speech Recognition (ASR).
-Enables multilingual and voice-driven symptom submission.
-Improves accessibility in low-literacy and rural communities.
-📝 ASHA Worker Feedback Loop
-Collects field observations from frontline healthcare workers.
-Active learning pipeline continuously improves model performance.
-Bridges AI predictions with real-world healthcare expertise.
-📊 Public Health Dashboard
-Real-time analytics and surveillance metrics.
-Outbreak trends, hotspot monitoring, and syndrome distribution.
-Interactive visualizations for informed decision-making.
-🖥️ Frontend
-⚛️ React.js
-Responsive chat interface
-Interactive surveillance dashboard
-Geographic outbreak heatmaps
-Modern data visualization components
-⚙️ Backend
-🐍 FastAPI
-RESTful APIs
-Hybrid RAG pipeline
-Machine Learning inference engine
-ST-DBSCAN outbreak detection
-Automated syndrome classification
-Feedback management APIs
-🛠️ Tech Stack
-Category	Technologies
-Frontend	React, JavaScript, HTML, CSS
-Backend	FastAPI, Python
-AI/ML	Scikit-learn, Sentence Transformers, RAG
-Data Processing	Pandas, NumPy
-Geospatial Analytics	ST-DBSCAN
-Visualization	Plotly, Leaflet/Mapbox
-Database	SQLite/PostgreSQL
-APIs	REST
-🎯 Project Objectives
-Detect potential disease outbreaks at an early stage.
-Assist healthcare workers with AI-driven decision support.
-Improve surveillance through spatial-temporal analytics.
-Collect structured field feedback for continuous model improvement.
-Enable faster, evidence-based public health interventions.
-🌍 Potential Applications
-Government public health departments
-District surveillance units
-Hospitals and primary healthcare centers
-Community health worker networks (ASHA/ANM)
-Disaster and epidemic response systems
-Research and epidemiological studies
+## 🚀 Features
+
+### 🤖 AI Health Assistant
+- Hybrid RAG + rule-based medical guidance
+- Emergency safety override for life-threatening symptoms
+- Confidence-scored responses using WHO and MoHFW knowledge sources
+- Multilingual conversational interface
+
+### 🦠 Syndromic Surveillance
+- Automatic symptom extraction
+- HDBSCAN-based syndrome clustering
+- Detection of emerging disease patterns
+- Population-level symptom monitoring
+
+### 📍 Spatial-Temporal Outbreak Detection
+- ST-DBSCAN outbreak detection
+- Geographic hotspot identification
+- Temporal outbreak progression analysis
+- Interactive outbreak visualization
+
+### 🎤 Voice-Based Symptom Reporting
+- Browser-based Web Speech API
+- OpenAI Whisper speech recognition
+- Support for English, Kannada, Hindi, Tamil, and Telugu
+- Dialect-aware symptom recognition
+
+### 👩‍⚕️ ASHA Feedback Module
+- Community health worker validation interface
+- Human-in-the-loop feedback collection
+- Active learning workflow for future model improvement
+
+### 📊 Public Health Dashboard
+- Disease trend analytics
+- Syndrome distribution
+- Outbreak monitoring
+- Nearby healthcare facility recommendations
+
+---
+
+# 🏗️ System Architecture
+
+```
+                   Voice / Text Input
+                           │
+                           ▼
+         Web Speech API / OpenAI Whisper
+                           │
+                           ▼
+              Symptom Extraction Layer
+                           │
+        ┌──────────────────┼──────────────────┐
+        ▼                  ▼                  ▼
+ Emergency Rules      RAG Retrieval      Translation
+        │                  │                  │
+        └──────────────────┼──────────────────┘
+                           ▼
+                 AI Response Generation
+                           │
+        ┌──────────────────┼──────────────────┐
+        ▼                  ▼                  ▼
+ HDBSCAN Clustering   ST-DBSCAN Engine   ASHA Feedback
+        │                  │                  │
+        └──────────────────┼──────────────────┘
+                           ▼
+             Public Health Dashboard
+```
+
+---
+
+# 💡 Key Technical Features
+
+## Hybrid RAG with Rule-Based Safety
+
+- Rule-based emergency detection for critical symptoms
+- Sentence Transformer embeddings
+- FAISS vector retrieval
+- Confidence-scored AI responses
+- WHO & MoHFW knowledge base
+
+---
+
+## Syndromic Surveillance
+
+- 30-dimensional symptom feature vectors
+- HDBSCAN clustering
+- Automatic syndrome identification
+- Noise and outlier handling
+
+---
+
+## Spatial-Temporal Analytics
+
+- ST-DBSCAN clustering
+- Haversine distance calculation
+- Geographic hotspot detection
+- Temporal outbreak analysis
+
+---
+
+## Multilingual Voice Interface
+
+- Browser Web Speech API
+- OpenAI Whisper fallback
+- Medical term normalization
+- Five-language support
+
+---
+
+# 🛠️ Tech Stack
+
+| Category | Technologies |
+|----------|--------------|
+| Frontend | React.js, Tailwind CSS, PWA, Web Speech API, Lucide React |
+| Backend | FastAPI, Python, Uvicorn, Pydantic |
+| AI / ML | OpenAI Whisper, gTTS, Sentence Transformers, FAISS, HDBSCAN, ST-DBSCAN, Scikit-learn |
+| Database | MongoDB Atlas |
+| Data Processing | Pandas, NumPy |
+| APIs | REST APIs |
+
+---
+
+# 📊 Prototype Validation
+
+| Feature | Result |
+|---------|--------|
+| Functional Testing | **96% (48/50)** |
+| Syndromic Clustering | **100% (100/100 reports)** |
+| ST-DBSCAN Detection | **97.5% (78/80 cases)** |
+| Voice Input | **90% (27/30 recordings)** |
+| ASHA Feedback UI | **100% Functional** |
+| Facilities Finder | **100% Functional** |
+
+---
+
+# 📈 Simulated Outbreak Detection
+
+| Metric | Result |
+|--------|--------|
+| True Clusters | 3 |
+| Clusters Detected | 3 |
+| False Positives | 0 |
+| False Negatives | 0 |
+| Detection Accuracy | **100% (Simulated Data)** |
+| Mean Detection Delay | **1.8 Days** |
+
+---
+
+# 📉 Syndromic Clustering Performance
+
+| Syndrome | Precision | Recall |
+|----------|-----------|--------|
+| Dengue-like | 95% | 95% |
+| Respiratory | 95% | 95% |
+| Gastroenteritis | 97.1% | 97.1% |
+| Influenza-like | 92% | 92% |
+| Overall | **95%** | **95%** |
+
+---
+
+# 🌍 Applications
+
+- Public Health Departments
+- Disease Surveillance Units
+- Primary Healthcare Centers
+- Community Health Worker Networks
+- Epidemiological Research
+- Rural Healthcare Monitoring
+
+---
+
+# 🔮 Future Enhancements
+
+- Llama-3 integration for advanced medical reasoning
+- Federated learning
+- ABDM/NDHM integration
+- Weather-assisted outbreak prediction
+- Expansion to additional Indian languages
+- Large-scale ASHA deployment
+- Long-term field validation
+
+---
+
+# ⚠️ Disclaimer
+
+SympTrack is a **student research prototype** developed to demonstrate the technical feasibility of AI-assisted syndromic surveillance. The platform provides health awareness and surveillance support only and is **not a substitute for professional medical diagnosis or treatment**. Prototype validation was performed using functional testing, synthetic datasets, and limited user evaluation; extensive clinical validation and real-world deployment remain future work.
+
+---
+
+# 📄 Research Highlights
+
+- Hybrid RAG with emergency rule-based safety override
+- HDBSCAN-based syndromic surveillance
+- ST-DBSCAN spatial-temporal outbreak detection
+- Multilingual conversational AI with voice support
+- Human-in-the-loop validation through ASHA feedback
+
+---
+
+# 📜 License
+
+This project is intended for educational and research purposes only.
